@@ -1,0 +1,66 @@
+<footer class="footer mt-auto pt-5 pb-4 border-top">
+  <div class="container">
+    <div class="row gy-4">
+      <!-- Coluna 1: Navegação/Categorias -->
+      <div class="col-lg-3 col-md-6">
+        <h5 class="mb-3">Navegação</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a routerLink="/" class="text-decoration-none">Início</a></li>
+          <li class="mb-2"><a routerLink="/products" class="text-decoration-none">Produtos</a></li>
+          <li class="mb-2"><a routerLink="/about" class="text-decoration-none">Sobre Nós</a></li>
+          <li class="mb-2"><a routerLink="/cart" class="text-decoration-none">Carrinho</a></li>
+          <!-- Adicionar link para categorias principais se houver -->
+        </ul>
+      </div>
+
+      <!-- Coluna 2: Institucional/Ajuda -->
+      <div class="col-lg-3 col-md-6">
+        <h5 class="mb-3">Ajuda</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#" class="text-decoration-none">Fale Conosco</a></li>
+          <li class="mb-2"><a href="#" class="text-decoration-none">Política de Privacidade</a></li>
+          <li class="mb-2"><a href="#" class="text-decoration-none">Termos de Uso</a></li>
+          <li class="mb-2"><a href="#" class="text-decoration-none">Entregas e Prazos</a></li>
+        </ul>
+      </div>
+
+      <!-- Coluna 3: Contato -->
+      <div class="col-lg-3 col-md-6">
+        <h5 class="mb-3">Contato</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><fa-icon [icon]="faEnvelope" class="me-2"></fa-icon> contato&#64;clubedojava.com</li>
+          <li class="mb-2"><fa-icon [icon]="faPhone" class="me-2"></fa-icon> (75) XXXX-XXXX</li>
+          <!-- Adicionar endereço se relevante -->
+        </ul>
+      </div>
+
+      <!-- Coluna 4: Redes Sociais -->
+      <div class="col-lg-3 col-md-6">
+        <h5 class="mb-3">Siga-nos</h5>
+        <div class="social-icons">
+          <a href="https://github.com/bulletdev/clube-do-java" target="_blank" rel="noopener noreferrer" class="me-3 fs-4" aria-label="GitHub">
+            <fa-icon [icon]="faGithub"></fa-icon>
+          </a>
+          <a href="https://linkedin.com/in/michael-bullet" target="_blank" rel="noopener noreferrer" class="me-3 fs-4" aria-label="LinkedIn">
+            <fa-icon [icon]="faLinkedin"></fa-icon>
+          </a>
+          <!-- Adicionar mais ícones (faTwitter, faInstagram, etc.) -->
+          <!-- Exemplo:
+          <a href="#" target="_blank" rel="noopener noreferrer" class="me-3 fs-4" aria-label="Instagram">
+            <fa-icon [icon]="faInstagram"></fa-icon>
+          </a>
+          -->
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Linha de Copyright -->
+    <div class="row">
+      <div class="col text-center">
+        <p class="text-muted mb-0">© {{ currentYear }} Clube do Java Store. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </div>
+</footer> 

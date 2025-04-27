@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" routerLink="/">
+      <img src="/assets/images/logo-cdj-simple.png" alt="Clube do Java Logo" height="30" class="d-inline-block align-text-top me-2">
+      Clube do Java Store
+    </a>
+
+    <button class="navbar-toggler" type="button" (click)="toggleNavbar()" aria-controls="navbarNavDropdown" [attr.aria-expanded]="!isNavbarCollapsed" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown" [ngbCollapse]="isNavbarCollapsed">
+      <!-- Itens à Esquerda (ex: Categorias) -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active" (click)="isNavbarCollapsed = true">Produtos</a>
+        </li>
+        <!-- Adicionar mais links de navegação aqui (ex: categorias) -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about" routerLinkActive="active" (click)="isNavbarCollapsed = true">Sobre</a>
+        </li>
+      </ul>
+
+      <!-- Itens à Direita (Busca, Carrinho, Login/Usuário) -->
+      <ul class="navbar-nav ms-auto align-items-center">
+        <!-- Barra de Busca (opcional) -->
+        <li class="nav-item me-2">
+          <form class="d-flex" role="search">
+            <input class="form-control form-control-sm me-2" type="search" placeholder="Buscar produtos..." aria-label="Buscar">
+            <button class="btn btn-outline-light btn-sm" type="submit">Buscar</button>
+          </form>
+        </li>
+
+        <!-- Carrinho -->
+        <li class="nav-item">
+          <a class="nav-link position-relative" routerLink="/cart" routerLinkActive="active" (click)="isNavbarCollapsed = true">
+            <fa-icon [icon]="faShoppingCart"></fa-icon>
+            <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
+              {{ (cartItemCount$ | async) ?? 0 }}
+              <span class="visually-hidden">itens no carrinho</span>
+            </span>
+          </a>
+        </li>
+
+        <!-- Login/Registro ou Menu Usuário -->
+        <ng-container *ngIf="(isLoggedIn$ | async) === false; else userMenu">
+          <li class="nav-item">
+            <button class="btn btn-outline-light btn-sm me-2" (click)="navigateToLogin()">
+              <fa-icon [icon]="faSignInAlt" class="me-1"></fa-icon> Entrar
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-light btn-sm" (click)="navigateToRegister()">
+              <fa-icon [icon]="faUserPlus" class="me-1"></fa-icon> Registrar
+            </button>
+          </li>
+        </ng-container>
+
+        <ng-template #userMenu>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <fa-icon [icon]="faUser" class="me-1"></fa-icon> {{ (userName$ | async) ?? 'Usuário' }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUserDropdown">
+              <li><a class="dropdown-item" (click)="navigateToProfile()"><fa-icon [icon]="faUser" class="me-2"></fa-icon> Meu Perfil</a></li>
+              <li><a class="dropdown-item" (click)="navigateToOrders()"><fa-icon [icon]="faBoxOpen" class="me-2"></fa-icon> Meus Pedidos</a></li>
+              <!-- <li><a class="dropdown-item" routerLink="/wishlist"><fa-icon [icon]="faHeart" class="me-2"></fa-icon> Lista de Desejos</a></li> -->
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item" (click)="logout()"><fa-icon [icon]="faSignOutAlt" class="me-2"></fa-icon> Sair</button></li>
+            </ul>
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</nav> 

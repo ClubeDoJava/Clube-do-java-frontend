@@ -1,0 +1,17 @@
+<ng-container *ngIf="product">
+  <div class="card h-100 shadow-sm product-card">
+    <a [routerLink]="['/products', product.id]" class="product-card-link">
+      <img [src]="product.imageUrl || 'assets/images/placeholder.png'" [alt]="product.name" class="card-img-top product-card-img">
+    </a>
+    <div class="card-body d-flex flex-column">
+      <h5 class="card-title">
+        <a [routerLink]="['/products', product.id]" class="product-card-title-link">{{ product.name }}</a>
+      </h5>
+      <p class="card-text text-muted small flex-grow-1">{{ product.description | slice:0:80 }}{{ (product.description.length || 0) > 80 ? '...' : '' }}</p>
+      <div class="d-flex justify-content-between align-items-center mt-auto">
+        <p class="text-primary fw-bold mb-0">R$ {{ product.price | number:'1.2-2' }}</p>
+        <a [routerLink]="['/products', product.id]" class="btn btn-sm btn-outline-primary">Ver Mais</a>
+      </div>
+    </div>
+  </div>
+</ng-container> 

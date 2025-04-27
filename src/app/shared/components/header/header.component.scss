@@ -1,0 +1,41 @@
+/* Estilos específicos para HeaderComponent */
+// Remover import global se não usar variáveis/mixins daqui
+// @use '../../../../styles' as styles;
+
+.navbar {
+  // Exemplo: Ajustar padding, altura, etc.
+  // padding-top: 0.8rem;
+  // padding-bottom: 0.8rem;
+}
+
+.navbar-brand {
+  // Estilo do logo/nome da loja
+  font-size: 1.4rem;
+}
+
+// Ajustar tamanho do badge do carrinho
+.nav-link .badge {
+  font-size: 0.65em;
+  padding: 0.3em 0.5em;
+}
+
+// Estilo para o dropdown do usuário
+.dropdown-menu {
+  min-width: 180px; // Ajustar largura mínima
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  fa-icon {
+    width: 20px; // Alinhar ícones
+    text-align: center;
+  }
+}
+
+// Media query para ajustar o header em telas menores, se necessário
+// @media (max-width: 991.98px) {
+//   .navbar-nav {
+//     // Estilos para o menu hamburguer
+//   }
+// } 

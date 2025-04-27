@@ -1,0 +1,485 @@
+/* Arquivo: src/styles.scss */
+@use "sass:color";
+/* Importa o Bootstrap usando @use */
+@use "bootstrap/scss/bootstrap";
+@use 'ngx-toastr/toastr';
+
+/* Variáveis globais - Tema Dark (Preto/Vermelho) */
+:root {
+  --cdj-dark-bg: #010001; // Preto solicitado
+  --cdj-secondary-bg: #1c1c1c; // Cinza muito escuro
+  --cdj-tertiary-bg: #2b2b2b; // Cinza escuro
+  --cdj-border-color: #343a40;
+  --cdj-text: #f8f9fa; // Branco
+  --cdj-red-accent: #b30202; // Vermelho solicitado
+  --cdj-red-hover: #9f0202;  // Vermelho hover calculado
+  --cdj-red-active: #8c0202; // Vermelho active calculado
+
+  // Mapeamento para Bootstrap (Modo Dark)
+  --bs-body-bg: var(--cdj-dark-bg);
+  --bs-body-color: var(--cdj-text);
+  --bs-border-color: var(--cdj-border-color);
+  --bs-border-color-translucent: rgba(248, 249, 250, 0.15); // Baseado no texto claro
+
+  --bs-primary: var(--cdj-red-accent); // Vermelho como primário
+  --bs-primary-rgb: 179, 2, 2; // RGB para #b30202
+  --bs-secondary: var(--cdj-tertiary-bg); // Cinza escuro como secundário
+  --bs-secondary-rgb: 43, 43, 43;
+
+  --bs-emphasis-color: var(--cdj-text);
+  --bs-secondary-bg: var(--cdj-secondary-bg);
+  --bs-tertiary-bg: var(--cdj-tertiary-bg);
+
+  --bs-link-color: var(--cdj-red-accent);
+  --bs-link-hover-color: var(--cdj-red-hover);
+  --bs-code-color: var(--cdj-red-accent);
+
+  // Ajustes específicos para componentes
+  --bs-card-bg: var(--cdj-secondary-bg);
+  --bs-card-border-color: var(--cdj-border-color);
+  --bs-card-cap-bg: var(--cdj-tertiary-bg);
+  --bs-list-group-bg: var(--cdj-secondary-bg);
+  --bs-list-group-color: var(--bs-body-color);
+  --bs-list-group-border-color: var(--cdj-border-color);
+  --bs-form-control-bg: var(--cdj-tertiary-bg);
+  --bs-form-control-color: var(--cdj-text);
+  --bs-form-control-border-color: var(--cdj-border-color);
+
+  // Cores mantidas da definição anterior que podem ser úteis
+  --text-color: var(--cdj-text);
+  --primary-color: var(--cdj-red-accent);
+  --secondary-color: var(--cdj-tertiary-bg);
+  --card-bg-color: var(--cdj-secondary-bg);
+  --border-color: var(--cdj-border-color);
+  --link-color: var(--cdj-red-accent);
+  --link-hover-color: var(--cdj-red-hover);
+  --button-bg-color: var(--primary-color);
+  --button-text-color: var(--cdj-text); // Texto branco no botão vermelho
+  --button-hover-bg-color: var(--link-hover-color);
+  --navbar-bg-color: var(--cdj-secondary-bg);
+  --footer-bg-color: var(--cdj-secondary-bg);
+  --footer-text-color: #{rgba(var(--cdj-text), 0.7)};
+
+  // Mapeamento para Bootstrap (Modo Dark)
+  --bs-body-bg: var(--cdj-dark-bg);
+  --bs-body-color: var(--cdj-text);
+  --bs-border-color: var(--cdj-border-color);
+  --bs-border-color-translucent: rgba(248, 249, 250, 0.15); // Baseado no texto claro
+
+  --bs-primary: var(--cdj-red-accent); // Vermelho como primário
+  --bs-primary-rgb: 179, 2, 2; // RGB para #b30202
+  --bs-secondary: var(--cdj-tertiary-bg); // Cinza escuro como secundário
+  --bs-secondary-rgb: 43, 43, 43;
+
+  --bs-emphasis-color: var(--cdj-text);
+  --bs-secondary-bg: var(--cdj-secondary-bg);
+  --bs-tertiary-bg: var(--cdj-tertiary-bg);
+
+  --bs-link-color: var(--cdj-red-accent);
+  --bs-link-hover-color: var(--cdj-red-hover);
+  --bs-code-color: var(--cdj-red-accent);
+
+  // Ajustes específicos para componentes
+  --bs-card-bg: var(--cdj-secondary-bg);
+  --bs-card-border-color: var(--cdj-border-color);
+  --bs-card-cap-bg: var(--cdj-tertiary-bg);
+  --bs-list-group-bg: var(--cdj-secondary-bg);
+  --bs-list-group-color: var(--bs-body-color);
+  --bs-list-group-border-color: var(--cdj-border-color);
+  --bs-form-control-bg: var(--cdj-tertiary-bg);
+  --bs-form-control-color: var(--cdj-text);
+  --bs-form-control-border-color: var(--cdj-border-color);
+}
+
+/* Estilos básicos */
+body {
+  font-family: 'Roboto', sans-serif;
+  padding-top: 56px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+main {
+  flex: 1;
+  padding-bottom: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--bs-body-color);
+}
+
+a {
+  cursor: pointer;
+  color: var(--bs-link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--bs-link-hover-color);
+  text-decoration: underline;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.main-content {
+  min-height: calc(100vh - 56px - 60px);
+  padding: var(--bs-container-padding-x, 2rem) 0; // Usar variável bootstrap se possível
+}
+
+/* Cards de produtos */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+  .card-img-top {
+    height: 200px;
+    object-fit: contain;
+    background-color: #ffffff; // Fundo branco para imagens contrastarem melhor
+    padding: 1rem;
+    border-bottom: 1px solid var(--bs-border-color);
+  }
+  .card-body {
+    padding: 1.25rem;
+  }
+  .card-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    a {
+        color: var(--bs-body-color); // Título do produto usa cor do body
+        &:hover {
+            color: var(--bs-link-hover-color);
+        }
+    }
+  }
+  .price {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--bs-primary); // Preço em vermelho
+  }
+}
+
+/* Página de detalhes do produto */
+.product-detail {
+  .product-gallery {
+    .main-image {
+      width: 100%;
+      height: 400px;
+      object-fit: contain;
+      background-color: #fff; // Fundo branco para a imagem principal
+      border: 1px solid var(--bs-border-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .thumbnail-container {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      .thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        background-color: #fff; // Fundo branco para thumbnails
+        &.active {
+          border-color: var(--bs-primary); // Borda vermelha na ativa
+        }
+      }
+    }
+  }
+  .product-info {
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--bs-primary); // Preço em vermelho
+      margin-bottom: 1.5rem;
+    }
+    .description {
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+  }
+}
+
+/* Carrinho de compras */
+.cart-table {
+  .product-thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background-color: #fff; // Fundo branco para thumbnail
+  }
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    .btn {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    input {
+      width: 50px;
+      text-align: center;
+      margin: 0 0.5rem;
+    }
+  }
+}
+
+/* Animações */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .product-detail {
+    .product-gallery {
+      .main-image { height: 300px; }
+    }
+    .product-info {
+      h1 { font-size: 1.5rem; }
+      .price { font-size: 1.5rem; }
+    }
+  }
+  .cart-table {
+    .product-thumbnail {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
+/* Estilização do Spinner - Removido se controlado em outro lugar */
+
+/* Estilização do Toastr */
+.toast-container {
+  .ngx-toastr {
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+    &:hover {
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+    }
+    .toast-close-button {
+      color: var(--bs-body-color);
+      text-shadow: none;
+      opacity: 0.8;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    .toast-title {
+      color: var(--bs-primary);
+    }
+  }
+  .toast-success {
+    border-left: 5px solid #28a745;
+  }
+  .toast-error {
+    border-left: 5px solid #dc3545;
+  }
+  .toast-info {
+    border-left: 5px solid #17a2b8;
+  }
+  .toast-warning {
+    border-left: 5px solid #ffc107;
+  }
+}
+
+/* Estilo específico para títulos de seção como "Categorias" */
+.section-title {
+  color: var(--primary-color);
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+/* Ajuste Navbar */
+app-header .navbar {
+    background-color: var(--navbar-bg-color) !important;
+    border-bottom: 1px solid var(--bs-border-color);
+    .navbar-brand img {
+      filter: brightness(0) invert(1); /* Logo branco no fundo escuro */
+    }
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus,
+.navbar-dark .navbar-nav .nav-link.active {
+  color: #fff;
+}
+
+/* Ajuste Footer */
+app-footer {
+    background-color: var(--footer-bg-color);
+    border-top: 1px solid var(--bs-border-color) !important;
+    color: var(--footer-text-color);
+    padding-top: 3rem; // Aumenta o padding superior
+    padding-bottom: 1.5rem; // Ajusta o padding inferior
+
+    h5 {
+      color: var(--primary-color); // Títulos das colunas em vermelho
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    ul {
+      padding-left: 0; // Remove padding padrão da lista
+    }
+
+    li {
+      // Estilos para itens da lista se necessário
+    }
+
+    a {
+      color: var(--footer-text-color); // Links com a cor do texto padrão
+      text-decoration: none; // Remove sublinhado padrão
+      transition: color 0.2s ease-in-out;
+
+      &:hover {
+        color: var(--primary-color); // Link fica vermelho no hover
+      }
+    }
+
+    .social-icons a {
+      color: var(--footer-text-color); // Ícones sociais com cor padrão
+      &:hover {
+        color: var(--primary-color); // Ícones vermelhos no hover
+      }
+    }
+
+    hr {
+       border-top-color: var(--bs-border-color); // Cor do divisor
+    }
+
+    .text-muted {
+       color: var(--footer-text-color) !important; // Ajuste para texto muted ficar um pouco mais suave
+    }
+}
+
+/* Ajuste Botões */
+.btn-primary { // Botão Vermelho
+   --bs-btn-bg: var(--cdj-red-accent);
+   --bs-btn-border-color: var(--cdj-red-accent);
+   --bs-btn-hover-bg: var(--cdj-red-hover);
+   --bs-btn-hover-border-color: var(--cdj-red-hover);
+   --bs-btn-active-bg: var(--cdj-red-active);
+   --bs-btn-active-border-color: var(--cdj-red-active);
+   --bs-btn-color: var(--cdj-text); // Texto branco para contraste
+   --bs-btn-hover-color: var(--cdj-text);
+   --bs-btn-active-color: var(--cdj-text);
+}
+
+.btn-outline-primary { // Botão Contorno Vermelho
+  --bs-btn-color: var(--primary-color);
+  --bs-btn-border-color: var(--primary-color);
+  --bs-btn-hover-color: var(--text-color);
+  --bs-btn-hover-bg: var(--primary-color);
+  --bs-btn-hover-border-color: var(--primary-color);
+  --bs-btn-active-color: var(--text-color);
+  --bs-btn-active-bg: var(--link-hover-color); // Usar hover do link
+  --bs-btn-active-border-color: var(--link-hover-color); // Usar hover do link
+}
+
+/* Ajuste para formulários no modo escuro */
+.form-control {
+  background-color: var(--bs-form-control-bg);
+  color: var(--bs-form-control-color);
+  border-color: var(--bs-form-control-border-color);
+
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+  }
+
+  &::placeholder {
+    color: var(--secondary-color);
+  }
+}
+
+.form-select {
+  background-color: var(--bs-form-control-bg);
+  color: var(--bs-form-control-color);
+  border-color: var(--bs-form-control-border-color);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23f8f9fa' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+
+  &:focus {
+     border-color: var(--primary-color);
+     box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+   }
+}
+
+/* Remover estilos específicos do tema laranja */
+.hero-section,
+.customer-quotes {
+  // Manter apenas se quiser usar com as cores do tema atual
+  // Se não, remover ou comentar essas seções
+  background-color: var(--card-bg-color); // Exemplo: usar card-bg
+  color: var(--bs-body-color);
+  padding: 2rem 0;
+  margin: 2rem 0;
+}
+
+.hero-section .btn-light { // Ajustar se hero section for mantida
+  background-color: var(--bs-body-bg);
+  color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  &:hover {
+    background-color: var(--bs-primary);
+    color: var(--bs-body-bg);
+  }
+}
+
+.customer-quotes .quote-card { // Ajustar se quotes for mantida
+  background-color: var(--bs-body-bg);
+  border: 1px solid var(--border-color);
+}
+
+.customer-quotes .quote-text::before { // Ajustar se quotes for mantida
+  color: var(--primary-color);
+}
+
+.customer-quotes .quote-author { // Ajustar se quotes for mantida
+  color: var(--secondary-color);
+}
+
+/* ----- General Adjustments ----- */
+.border-top {
+  border-top: 1px solid var(--border-color) !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(255, 255, 255, 0.075) !important;
+}
+
+/* Import specific component styles */
+@import './app/shared/components/product-card/product-card.component.scss';
+@import './app/shared/components/duke-chatbot/duke-chatbot.component.scss';

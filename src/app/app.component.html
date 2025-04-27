@@ -1,0 +1,20 @@
+<!-- Este é o ponto de entrada para as rotas. Os componentes correspondentes às rotas serão exibidos aqui. -->
+
+<!-- Spinner Global (controlado por um serviço ou interceptor) -->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-spin-clockwise" [fullScreen]="true">
+  <p style="color: white"> Carregando... </p>
+</ngx-spinner>
+
+<!-- Header da Aplicação -->
+<app-header></app-header>
+
+<!-- Conteúdo Principal (Roteado) -->
+<main class="container my-4">
+<router-outlet></router-outlet> 
+</main>
+
+<!-- Chatbot Flutuante -->
+<app-duke-chatbot></app-duke-chatbot>
+
+<!-- Footer da Aplicação -->
+<app-footer></app-footer> 

@@ -1,0 +1,146 @@
+<div class="home-container">
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-4 fw-bold">Clube do Java</h1>
+                    <p class="lead">Produtos exclusivos para desenvolvedores Java</p>
+                    <p>Camisetas, canecas, adesivos e muito mais para os amantes de Java!</p>
+                    <a routerLink="/products" class="btn btn-light btn-lg mt-3">
+                        Explorar Produtos
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <img src="assets/images/hero-image.png" alt="Java Products" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products py-5">
+        <div class="container">
+            <h2 class="text-center mb-4 section-title">Produtos em Destaque</h2>
+
+            <div *ngIf="loadingProducts" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+
+            <div *ngIf="errorProducts" class="alert alert-danger text-center" role="alert">
+                Erro ao carregar produtos. Tente novamente mais tarde.
+            </div>
+
+            <div *ngIf="!loadingProducts && !errorProducts && featuredProducts.length > 0" class="row">
+                <div *ngFor="let product of featuredProducts" class="col-md-3 mb-4">
+                    <app-product-card [product]="product"></app-product-card>
+                </div>
+            </div>
+
+            <div *ngIf="!loadingProducts && !errorProducts && featuredProducts.length === 0" class="text-center text-muted py-5">
+                Nenhum produto em destaque encontrado.
+            </div>
+
+            <div class="text-center mt-4">
+                <a routerLink="/products" class="btn btn-primary">Ver Todos os Produtos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section py-5 bg-light-subtle">
+        <div class="container">
+            <h2 class="text-center mb-4 section-title">Categorias</h2>
+
+            <div *ngIf="loadingCategories" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+
+            <div *ngIf="errorCategories" class="alert alert-danger text-center" role="alert">
+                Erro ao carregar categorias. Tente novamente mais tarde.
+            </div>
+
+            <div *ngIf="!loadingCategories && !errorCategories && categories.length > 0" class="row">
+                <div *ngFor="let category of categories" class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm category-card">
+                        <a [routerLink]="['/products/category', category.id]" class="category-card-link">
+                            <img [src]="category.imageUrl || 'assets/images/placeholder.png'" [alt]="category.name" class="card-img-top category-card-img">
+                        </a>
+                        <div class="card-body text-center d-flex flex-column">
+                            <h5 class="card-title">
+                                <a [routerLink]="['/products/category', category.id]" class="category-card-title-link">{{ category.name }}</a>
+                            </h5>
+                            <p class="card-text text-muted small flex-grow-1">{{ category.description || 'Explorar produtos desta categoria' }}</p>
+                            <a [routerLink]="['/products/category', category.id]" class="btn btn-sm btn-outline-primary mt-auto">Explorar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="!loadingCategories && !errorCategories && categories.length === 0" class="text-center text-muted py-5">
+                Nenhuma categoria encontrada.
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section py-5">
+        <div class="container">
+            <h2 class="text-center mb-4 section-title">O que dizem nossos clientes</h2>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3 text-warning">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <p class="card-text">"Comprei a camiseta Java Developer e a qualidade é excepcional. Recebo muitos elogios quando uso nos meetups!"</p>
+                            <p class="text-end mb-0 fw-bold">- Ricardo Silva</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3 text-warning">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <p class="card-text">"As canecas são ótimas! Uso todos os dias no trabalho e sempre recebo perguntas sobre onde comprei."</p>
+                            <p class="text-end mb-0 fw-bold">- Ana Oliveira</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3 text-warning">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-alt"></i>
+                            </div>
+                            <p class="card-text">"Meu notebook está repleto de adesivos do Clube do Java. A qualidade é excelente e não descascam facilmente."</p>
+                            <p class="text-end mb-0 fw-bold">- Carlos Mendes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

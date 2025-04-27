@@ -1,0 +1,68 @@
+<div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <!-- Substitua pela URL da sua imagem em assets/images/banner1.jpg (ou nome similar) -->
+      <img src="https://placehold.co/1200x400/5382a1/f8981d?text=Promoção+Imperdível!" class="d-block w-100" alt="Banner Promocional 1">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Promoção Imperdível!</h5>
+        <p>Confira nossos novos produtos Java com desconto.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <!-- Substitua pela URL da sua imagem em assets/images/banner2.jpg (ou nome similar) -->
+      <img src="https://placehold.co/1200x400/f8981d/5382a1?text=Novidades+Chegando!" class="d-block w-100" alt="Banner Novidades">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Novidades Chegando!</h5>
+        <p>Fique por dentro dos últimos lançamentos da loja.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+       <!-- Substitua pela URL da sua imagem em assets/images/banner3.jpg (ou nome similar) -->
+       <img src="https://placehold.co/1200x400/2c3e50/f8f9fa?text=Frete+Grátis!" class="d-block w-100" alt="Banner Frete Grátis">
+       <div class="carousel-caption d-none d-md-block">
+         <h5>Frete Grátis</h5>
+         <p>Nas compras acima de R$200 para todo o Brasil.</p>
+       </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<div class="container mt-5">
+  <!-- Seção Produtos em Destaque -->
+  <h2 class="section-title">Produtos em Destaque</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" *ngIf="(products$ | async) as products; else loading">
+    <div class="col" *ngFor="let product of products">
+      <app-product-card [product]="product"></app-product-card>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+      <p class="mt-2">Carregando produtos...</p>
+    </div>
+  </ng-template>
+
+  <!-- Manter seção "O que dizem nossos clientes" se existir -->
+  <!-- ... -->
+</div> 

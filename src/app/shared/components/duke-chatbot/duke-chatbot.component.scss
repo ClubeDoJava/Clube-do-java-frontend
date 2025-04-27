@@ -1,0 +1,262 @@
+@use "sass:color"; // Importar o módulo color do Sass
+
+// Definir variáveis do tema do chatbot para fácil reutilização
+$chatbot-bg: #111111; // Preto Carvão
+$chatbot-text: #f8f9fa; // Branco
+$chatbot-secondary-bg: #1c1c1c; // Cinza muito escuro
+$chatbot-tertiary-bg: #2b2b2b; // Cinza escuro
+$chatbot-border-color: #343a40;
+$chatbot-red-accent: #B22222; // Vermelho Firebrick
+$chatbot-red-hover: #A01F1F;
+$chatbot-red-active: #901C1C;
+
+// Escopo dos estilos do chatbot
+.duke-chatbot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  font-family: 'Roboto', sans-serif;
+
+  // Botão de iniciar chat (Vermelho)
+  .chat-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: $chatbot-red-accent;
+    color: $chatbot-text;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: $chatbot-red-hover;
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .duke-icon {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  // Contêiner do chat (Preto)
+  .chat-container {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 350px;
+    height: 450px;
+    background-color: $chatbot-bg;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    // Cabeçalho do chat (Preto com texto branco)
+    .chat-header {
+      padding: 12px 16px;
+      background-color: $chatbot-secondary-bg;
+      color: $chatbot-text;
+      border-bottom: 1px solid $chatbot-border-color;
+      display: flex;
+      align-items: center;
+
+      .duke-avatar {
+        width: 36px;
+        height: 36px;
+        margin-right: 10px;
+      }
+
+      .header-title {
+        flex-grow: 1;
+        h3 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        p {
+          margin: 0;
+          font-size: 12px;
+          opacity: 0.8;
+        }
+      }
+
+      .close-button {
+        background: none;
+        border: none;
+        color: $chatbot-text;
+        cursor: pointer;
+        font-size: 18px;
+        transition: all 0.2s ease;
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+
+    // Área de mensagens (Fundo preto, texto branco)
+    .chat-messages {
+      flex-grow: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background-color: $chatbot-bg;
+
+      .message {
+        margin-bottom: 12px;
+        max-width: 80%;
+
+        .message-bubble {
+          padding: 10px 14px;
+          border-radius: 18px;
+          position: relative;
+
+          &.user-message {
+            background-color: $chatbot-red-accent;
+            color: $chatbot-text;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+          }
+
+          &.bot-message {
+            background-color: $chatbot-secondary-bg;
+            color: $chatbot-text;
+            border-bottom-left-radius: 4px;
+            box-shadow: none;
+          }
+        }
+
+        .timestamp {
+          font-size: 10px;
+          color: #99a1a7;
+          margin-top: 4px;
+          text-align: right;
+        }
+      }
+
+      .typing-indicator {
+        display: flex;
+        padding: 10px 14px;
+        background-color: $chatbot-secondary-bg;
+        border-radius: 18px;
+        border-bottom-left-radius: 4px;
+        width: fit-content;
+        box-shadow: none;
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          background-color: #aaa;
+          border-radius: 50%;
+          margin: 0 2px;
+          animation: typing-animation 1.4s infinite ease-in-out;
+
+          &:nth-child(1) { animation-delay: 0s; }
+          &:nth-child(2) { animation-delay: 0.2s; }
+          &:nth-child(3) { animation-delay: 0.4s; }
+        }
+      }
+    }
+
+    // Sugestões rápidas (Fundo cinza escuro)
+    .quick-suggestions {
+      padding: 12px;
+      background-color: $chatbot-secondary-bg;
+      border-top: 1px solid $chatbot-border-color;
+      overflow-x: auto;
+      white-space: nowrap;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .suggestion {
+        display: inline-block;
+        margin-right: 8px;
+        background-color: $chatbot-tertiary-bg;
+        border: 1px solid $chatbot-border-color;
+        color: $chatbot-text;
+        border-radius: 16px;
+        padding: 6px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: $chatbot-red-accent;
+          color: $chatbot-text;
+          border-color: $chatbot-red-accent;
+        }
+      }
+    }
+
+    // Formulário de entrada (Fundo cinza escuro, botão vermelho)
+    .chat-form {
+      display: flex;
+      padding: 12px;
+      border-top: 1px solid $chatbot-border-color;
+      background-color: $chatbot-secondary-bg;
+
+      .message-input {
+        flex-grow: 1;
+        background-color: $chatbot-tertiary-bg;
+        border: 1px solid $chatbot-border-color;
+        color: $chatbot-text;
+        border-radius: 20px;
+        padding: 8px 12px;
+        outline: none;
+        transition: border 0.2s ease;
+
+         &::placeholder {
+           color: #99a1a7;
+         }
+
+        &:focus {
+          border-color: $chatbot-red-accent;
+          box-shadow: 0 0 0 0.2rem rgba(178, 34, 34, 0.25);
+        }
+      }
+
+      .send-button {
+        background-color: $chatbot-red-accent;
+        color: $chatbot-text;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        margin-left: 8px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+           background-color: $chatbot-red-hover;
+        }
+
+        &:disabled {
+          background-color: #495057;
+          cursor: not-allowed;
+          opacity: 0.65;
+        }
+      }
+    }
+  }
+}
+
+@keyframes typing-animation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-6px);
+  }
+}

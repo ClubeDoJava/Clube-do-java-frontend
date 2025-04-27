@@ -1,0 +1,63 @@
+<div class="duke-chatbot">
+    <!-- Botão para abrir/fechar o chat -->
+    <div class="chat-button" (click)="toggleChat()">
+        <img src="assets/images/duke/duke-icon.png" alt="Duke" class="duke-icon">
+    </div>
+
+    <!-- Janela do chat -->
+    <div class="chat-container" *ngIf="isChatOpen" [@slideInOut]>
+        <!-- Cabeçalho do chat -->
+        <div class="chat-header">
+            <img src="assets/images/duke/duke-avatar.png" alt="Duke" class="duke-avatar">
+            <div class="header-title">
+                <h3>Duke - Assistente Virtual</h3>
+                <p>Sempre pronto para ajudar!</p>
+            </div>
+            <button class="close-button" (click)="toggleChat()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Área de mensagens -->
+        <div class="chat-messages" #chatContainer>
+            <div *ngFor="let message of messages" class="message" [@fadeInOut]>
+                <div class="message-bubble" [ngClass]="{'user-message': !message.isBot, 'bot-message': message.isBot}">
+                    {{ message.text }}
+                </div>
+                <div class="timestamp">
+                    {{ message.timestamp | date:'HH:mm' }}
+                </div>
+            </div>
+
+            <!-- Indicador de digitação -->
+            <div *ngIf="isTyping" class="typing-indicator">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <!-- Sugestões rápidas -->
+        <div class="quick-suggestions">
+            <div *ngFor="let suggestion of quickSuggestions"
+                 class="suggestion"
+                 (click)="useQuickSuggestion(suggestion)">
+                {{ suggestion }}
+            </div>
+        </div>
+
+        <!-- Formulário para enviar mensagem -->
+        <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-form">
+            <input type="text"
+                   formControlName="message"
+                   class="message-input"
+                   placeholder="Digite sua mensagem..."
+                   autocomplete="off">
+            <button type="submit"
+                    class="send-button"
+                    [disabled]="chatForm.invalid || isTyping">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>

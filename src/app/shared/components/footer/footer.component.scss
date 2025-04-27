@@ -1,0 +1,17 @@
+/* Estilos específicos para FooterComponent */
+// Remover import global se não usar variáveis/mixins daqui
+// @use '../../../../styles' as styles;
+
+.footer {
+  // position: fixed; // Descomente se quiser um footer fixo no fundo
+  // bottom: 0;
+  // width: 100%;
+  font-size: 0.9rem;
+
+  .social-icons a {
+    transition: color 0.2s ease-in-out;
+    &:hover {
+      color: var(--primary-color) !important; // Revertido para usar variável CSS
+    }
+  }
+} 

@@ -1,0 +1,107 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title text-center mb-4">Criar Conta - Clube do Java</h3>
+
+          <div *ngIf="isLoading" class="text-center mb-3">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+          </div>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Campo Nome -->
+            <div class="mb-3">
+              <label for="name" class="form-label">Nome Completo</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Seu nome"
+                formControlName="name"
+                [ngClass]="{ 'is-invalid': name?.invalid && (name?.dirty || name?.touched) }"
+              />
+              <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="invalid-feedback">
+                <div *ngIf="name?.errors?.['required']">Nome é obrigatório.</div>
+              </div>
+            </div>
+
+            <!-- Campo E-mail -->
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mail</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="seu@email.com"
+                formControlName="email"
+                [ngClass]="{ 'is-invalid': email?.invalid && (email?.dirty || email?.touched) }"
+              />
+              <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="invalid-feedback">
+                <div *ngIf="email?.errors?.['required']">E-mail é obrigatório.</div>
+                <div *ngIf="email?.errors?.['email']">Formato de e-mail inválido.</div>
+              </div>
+            </div>
+
+            <!-- Grupo de Senha -->
+            <div formGroupName="passwordGroup">
+              <div class="row">
+                <!-- Campo Senha -->
+                <div class="col-md-6 mb-3">
+                  <label for="password" class="form-label">Senha</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Mínimo 6 caracteres"
+                    formControlName="password"
+                    [ngClass]="{ 'is-invalid': password?.invalid && (password?.dirty || password?.touched) }"
+                  />
+                  <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="invalid-feedback">
+                    <div *ngIf="password?.errors?.['required']">Senha é obrigatória.</div>
+                    <div *ngIf="password?.errors?.['minlength']">A senha deve ter no mínimo 6 caracteres.</div>
+                  </div>
+                </div>
+
+                <!-- Campo Confirmar Senha -->
+                <div class="col-md-6 mb-3">
+                  <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    placeholder="Repita a senha"
+                    formControlName="confirmPassword"
+                    [ngClass]="{ 'is-invalid': (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) || (passwordGroup?.errors?.['mismatch'] && confirmPassword?.touched) }"
+                  />
+                  <div *ngIf="confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)" class="invalid-feedback">
+                    <div *ngIf="confirmPassword?.errors?.['required']">Confirmação de senha é obrigatória.</div>
+                  </div>
+                  <div *ngIf="passwordGroup?.errors?.['mismatch'] && (confirmPassword?.dirty || confirmPassword?.touched)" class="invalid-feedback d-block">
+                    As senhas não coincidem.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botão Registrar -->
+            <div class="d-grid mb-3">
+              <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid || isLoading">
+                {{ isLoading ? 'Registrando...' : 'Registrar' }}
+              </button>
+            </div>
+
+            <!-- Link para Login -->
+            <div class="text-center">
+              <p class="mb-0">Já tem uma conta?</p>
+              <a routerLink="/auth/login" class="btn btn-link">Faça login aqui</a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
