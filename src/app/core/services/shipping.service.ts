@@ -5,6 +5,11 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ShippingOption } from '../models/shipping-option.model';
 
+export interface ShippingCalculationRequest {
+  destinationZipCode: string;
+  cartItems: { productId: number; quantity: number; weight: number; /* Outras dimensões se necessário */ }[];
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -13,13 +18,8 @@ export class ShippingService {
 
     constructor(private http: HttpClient) { }
 
-    calculateShipping(shippingData: any): Observable<ShippingOption[]> {
-        return this.http.post<ShippingOption[]>(`${this.apiUrl}/calculate`, shippingData)
-            .pipe(
-                catchError(error => {
-                    return throwError(() => error);
-                })
-            );
+    calculateShipping(requestData: ShippingCalculationRequest): Observable<ShippingOption[]> {
+        return this.http.post<ShippingOption[]>(`${this.apiUrl}/calculate`, requestData);
     }
 
     getTracking(trackingNumber: string, carrier: string): Observable<any> {

@@ -1,21 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
 import { CartService, CartItem } from '../../../core/services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { Product } from '../../../core/models/product.model';
 import { faShoppingCart, faPlus, faMinus, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'app-product-detail',
+    standalone: true,
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FontAwesomeModule
+    ],
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss']
 })
 export class ProductDetailComponent implements OnInit {
     product: Product | null = null;
     loading = true;
-    error = false;
+    errorMessage: string | null = null;
     selectedImage: string | null = null;
     relatedProducts: Product[] = [];
     addToCartForm: FormGroup;
@@ -44,18 +54,28 @@ export class ProductDetailComponent implements OnInit {
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             const id = Number(params.get('id'));
+            if (isNaN(id) || id <= 0) {
+                this.errorMessage = 'ID do produto inválido.';
+                this.loading = false;
+                return;
+            }
             this.loadProduct(id);
         });
     }
 
     loadProduct(id: number): void {
         this.loading = true;
-        this.error = false;
+        this.errorMessage = null;
 
         this.productService.getProductById(id).subscribe({
             next: (product) => {
+                if (!product) {
+                    this.errorMessage = 'Produto não encontrado.';
+                    this.loading = false;
+                    return;
+                }
                 this.product = product;
-                this.selectedImage = product.imageUrl;
+                this.selectedImage = product.imageUrl ? 'assets/images/products/' + product.imageUrl : null;
                 this.loading = false;
 
                 // Carrega produtos relacionados da mesma categoria
@@ -76,7 +96,10 @@ export class ProductDetailComponent implements OnInit {
             },
             error: (err) => {
                 console.error('Error loading product', err);
-                this.error = true;
+                this.errorMessage = 'Ocorreu um erro ao carregar o produto. Por favor, tente novamente mais tarde.';
+                if (err.status === 404) {
+                    this.errorMessage = 'Produto não encontrado.';
+                }
                 this.loading = false;
             }
         });

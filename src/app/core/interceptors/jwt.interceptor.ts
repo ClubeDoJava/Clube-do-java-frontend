@@ -13,12 +13,20 @@ export class JwtInterceptor implements HttpInterceptor {
         const isApiUrl = request.url.startsWith(environment.apiUrl);
         const token = this.authService.getToken();
 
+        // Log para depuração
+        console.log(`[JwtInterceptor] Intercepting request to: ${request.url}`);
+        console.log(`[JwtInterceptor] Is API URL: ${isApiUrl}`);
+        console.log(`[JwtInterceptor] Token found: ${token ? 'Yes' : 'No'}`);
+
         if (isApiUrl && token) {
             request = request.clone({
                 setHeaders: {
                     Authorization: `Bearer ${token}`
                 }
             });
+            console.log(`[JwtInterceptor] Token added to headers for: ${request.url}`);
+        } else if (isApiUrl && !token) {
+            console.warn(`[JwtInterceptor] Request to API (${request.url}) without a token.`);
         }
 
         return next.handle(request);

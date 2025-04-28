@@ -1,0 +1,98 @@
+<div class="container py-5">
+    <h1 class="mb-4">Seu Carrinho de Compras</h1>
+
+    <ng-container *ngIf="(cart$ | async) as cart; else loadingOrEmpty">
+        <div *ngIf="cart.items.length > 0; else emptyCart" class="cart-content">
+
+            <table class="table table-hover align-middle mb-4">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" style="width: 10%;">Produto</th>
+                        <th scope="col"></th>
+                        <th scope="col" style="width: 20%;">Preço Unitário</th>
+                        <th scope="col" style="width: 15%;" class="text-center">Quantidade</th>
+                        <th scope="col" style="width: 20%;" class="text-end">Subtotal</th>
+                        <th scope="col" style="width: 5%;" class="text-center">Remover</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of cart.items">
+                        <td>
+                            <img [src]="item.imageUrl ? 
+                                  ('assets/images/' + (item.imageUrl.includes('/') ? '' : 'products/') + item.imageUrl) 
+                                  : 
+                                  'assets/images/placeholder.png'" 
+                                 [alt]="item.name" class="img-fluid rounded" style="max-width: 60px;">
+                        </td>
+                        <td>
+                            <a [routerLink]="['/products', item.productId]" class="text-decoration-none fw-medium">{{ item.name }}</a>
+                            <!-- Adicionar detalhes como tamanho/cor se aplicável -->
+                        </td>
+                        <td>R$ {{ item.price | number:'1.2-2' }}</td>
+                        <td>
+                            <div class="input-group input-group-sm justify-content-center" style="width: 100px; margin: auto;">
+                                <button class="btn btn-outline-secondary" type="button" (click)="updateQuantity(item, -1)" [disabled]="item.quantity <= 1">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <input type="text" class="form-control text-center" [value]="item.quantity" readonly style="background-color: white;">
+                                <button class="btn btn-outline-secondary" type="button" (click)="updateQuantity(item, 1)">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="text-end fw-medium">R$ {{ (item.price * item.quantity) | number:'1.2-2' }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-link text-danger p-0" (click)="removeItem(item.productId)" title="Remover item">
+                                <i class="fa fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row justify-content-end">
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Resumo do Pedido</h5>
+                            <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    Subtotal ({{ cart.totalQuantity }} itens)
+                                    <span>R$ {{ cart.totalPrice | number:'1.2-2' }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    Frete
+                                    <span>Grátis</span> <!-- Ou calcular frete -->
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3 fw-bold text-uppercase">
+                                    Total
+                                    <span>R$ {{ cart.totalPrice | number:'1.2-2' }}</span>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary btn-lg w-100" (click)="goToCheckout(cart)">Finalizar Compra</button>
+                            <button class="btn btn-outline-secondary w-100 mt-2" (click)="clearCart()">Esvaziar Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </ng-container>
+
+    <!-- Template para carrinho vazio -->
+    <ng-template #emptyCart>
+        <div class="text-center py-5">
+            <i class="fa fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <h4 class="mb-3">Seu carrinho está vazio</h4>
+            <p class="text-muted mb-4">Adicione produtos ao seu carrinho para vê-los aqui.</p>
+            <a routerLink="/products" class="btn btn-primary">Ver Produtos</a>
+        </div>
+    </ng-template>
+
+    <!-- Template para estado de carregamento inicial -->
+    <ng-template #loadingOrEmpty>
+        <!-- Pode mostrar um spinner aqui se houver um delay inicial, ou cair direto no carrinho vazio -->
+        <ng-container *ngTemplateOutlet="emptyCart"></ng-container>
+    </ng-template>
+
+</div>

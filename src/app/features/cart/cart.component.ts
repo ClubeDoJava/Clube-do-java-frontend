@@ -1,12 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CartService, Cart, CartItem } from '../../core/services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { faTrashAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
     selector: 'app-cart',
+    standalone: true,
+    imports: [
+        CommonModule,
+        RouterModule,
+        FontAwesomeModule
+    ],
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.scss']
 })

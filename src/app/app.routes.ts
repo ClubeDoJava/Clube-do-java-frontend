@@ -18,31 +18,36 @@ export const appRoutes: Routes = [
     loadChildren: () => import('./features/auth/auth.routes').then(r => r.AUTH_ROUTES)
   },
   // Rota para Carrinho (Lazy Loaded)
-  // {
-  //   path: 'cart',
-  //   loadComponent: () => import('./features/cart/cart.component').then(c => c.CartComponent)
-  // },
+  {
+    path: 'cart',
+    loadComponent: () => import('./features/cart/cart.component').then(c => c.CartComponent)
+  },
   // Rota para Checkout (Lazy Loaded e Protegida)
-  // {
-  //   path: 'checkout',
-  //   loadComponent: () => import('./features/checkout/checkout.component').then(c => c.CheckoutComponent),
-  //   // canActivate: [AuthGuard] // Aplicar guarda aqui ou na definição do provider
-  // },
+  {
+    path: 'checkout',
+    loadComponent: () => import('./features/checkout/checkout.component').then(c => c.CheckoutComponent),
+    // canActivate: [AuthGuard] // Aplicar guarda aqui ou na definição do provider
+  },
   // Rota para Área do Usuário (Lazy Loaded e Protegida)
-  // {
-  //   path: 'user',
-  //   loadChildren: () => import('./features/user/user.routes').then(r => r.USER_ROUTES),
-  //   // canActivate: [AuthGuard]
-  // },
+  {
+    path: 'user',
+    loadChildren: () => import('./features/user/user.routes').then(r => r.USER_ROUTES),
+    // canActivate: [AuthGuard]
+  },
+  // Rota para Sobre (Lazy Loaded)
+  {
+    path: 'about',
+    loadComponent: () => import('./features/about/about.component').then(c => c.AboutComponent)
+  },
   // Rota Curinga (Página Não Encontrada)
-  // {
-  //   path: '404',
-  //   loadComponent: () => import('./core/components/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent)
-  // },
-  // {
-  //   path: '**',
-  //   redirectTo: '/404'
-  // }
+  {
+    path: '404',
+    loadComponent: () => import('./core/components/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent)
+  },
+  {
+    path: '**',
+    redirectTo: '/404'
+  }
 
   // Rota padrão temporária para auth (REMOVIDA/COMENTADA)
   // {

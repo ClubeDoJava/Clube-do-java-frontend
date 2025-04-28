@@ -1,0 +1,162 @@
+<div class="container py-5">
+    <h1 class="mb-4">Finalizar Compra</h1>
+
+    <div *ngIf="cart; else loadingCart">
+        <div *ngIf="cart.items.length > 0; else emptyCartMessage">
+            <div class="row g-5">
+                <!-- Coluna Principal (Formulário e Pagamento) -->
+                <div class="col-md-7 col-lg-8">
+                    <form [formGroup]="checkoutForm" (ngSubmit)="placeOrder()" novalidate>
+                        <!-- Seção de Endereço de Entrega -->
+                        <h4 class="mb-3">Endereço de Entrega</h4>
+                        <div *ngIf="(user$ | async) as user; else loadingUser">
+                            <div *ngIf="addresses.length > 0; else noAddresses">
+                                <label for="addressSelect" class="form-label">Selecione um endereço:</label>
+                                <select id="addressSelect" formControlName="addressId" class="form-select mb-3" [ngClass]="{ 'is-invalid': checkoutForm.get('addressId')?.invalid && checkoutForm.get('addressId')?.touched }">
+                                    <option [ngValue]="null" disabled>Selecione...</option>
+                                    <option *ngFor="let addr of addresses" [ngValue]="addr.id">
+                                        {{ addr.street }}, {{ addr.number }} {{ addr.complement ? '- ' + addr.complement : '' }} - {{ addr.neighborhood }}, {{ addr.city }} - {{ addr.state }} - CEP: {{ addr.zipCode }}
+                                        {{ addr.defaultAddress ? '(Padrão)' : '' }}
+                                    </option>
+                                </select>
+                                <div *ngIf="checkoutForm.get('addressId')?.invalid && checkoutForm.get('addressId')?.touched" class="invalid-feedback">
+                                    Por favor, selecione um endereço.
+                                </div>
+                                <!-- TODO: Adicionar botão/link para gerenciar/adicionar endereços -->
+                            </div>
+                            <ng-template #noAddresses>
+                                <div class="alert alert-warning">Você ainda não possui endereços cadastrados. <a routerLink="/user/addresses">Cadastrar endereço</a></div>
+                                <!-- Desabilitar botão de finalizar? -->
+                            </ng-template>
+                        </div>
+                        <ng-template #loadingUser>
+                            <p>Carregando informações do usuário...</p>
+                        </ng-template>
+
+                        <!-- Seção de Opções de Frete -->
+                        <h4 class="mt-4 mb-3">Opções de Frete</h4>
+                        <div *ngIf="isLoadingShipping" class="text-center my-3">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                <span class="visually-hidden">Calculando frete...</span>
+                            </div>
+                            <span class="ms-2">Calculando frete...</span>
+                        </div>
+                        <div *ngIf="!isLoadingShipping && shippingOptions.length > 0" class="mb-3">
+                            <label class="form-label">Selecione o método de envio:</label>
+                            <div *ngFor="let option of shippingOptions" class="form-check">
+                                <input class="form-check-input" type="radio" name="shippingOptionRadio" [id]="'shipping-' + option.code" [value]="option.code" formControlName="shippingOptionCode">
+                                <label class="form-check-label" [for]="'shipping-' + option.code">
+                                    {{ option.name }} - R$ {{ option.price | number:'1.2-2' }}
+                                    <small class="text-muted ms-2">(Entrega estimada: {{ option.deliveryTimeInDays }} dias)</small>
+                                </label>
+                            </div>
+                            <div *ngIf="checkoutForm.get('shippingOptionCode')?.invalid && checkoutForm.get('shippingOptionCode')?.touched" class="invalid-feedback d-block">
+                                 Por favor, selecione uma opção de frete.
+                            </div>
+                        </div>
+                        <div *ngIf="!isLoadingShipping && shippingOptions.length === 0 && selectedAddress" class="alert alert-warning">
+                            Nenhuma opção de frete encontrada para o endereço selecionado.
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Seção de Pagamento -->
+                        <h4 class="mb-3">Pagamento</h4>
+                        <div class="my-3">
+                            <div class="form-check">
+                                <input id="pix" name="paymentMethod" type="radio" class="form-check-input" formControlName="paymentMethod" value="pix" checked>
+                                <label class="form-check-label" for="pix">PIX</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="boleto" name="paymentMethod" type="radio" class="form-check-input" formControlName="paymentMethod" value="boleto">
+                                <label class="form-check-label" for="boleto">Boleto Bancário</label>
+                            </div>
+                            <!-- Adicionar outros métodos se necessário -->
+                        </div>
+
+                        <hr class="my-4">
+
+                        <button class="w-100 btn btn-primary btn-lg" type="submit" [disabled]="checkoutForm.invalid || isPlacingOrder">
+                            <span *ngIf="!isPlacingOrder">Finalizar Compra e Pagar</span>
+                            <span *ngIf="isPlacingOrder" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span *ngIf="isPlacingOrder"> Processando...</span>
+                        </button>
+                    </form>
+
+                    <!-- Seção para exibir informações de pagamento (QR Code, Linha digitável) -->
+                    <div *ngIf="paymentResponse && paymentMethod === 'pix'" class="mt-4 p-3 border rounded bg-light text-center">
+                        <h5>Pague com PIX</h5>
+                        <p>Escaneie o QR Code abaixo com o app do seu banco:</p>
+                        <img [src]="paymentResponse.pixQrCodeUrl" alt="PIX QR Code" class="img-fluid mb-3" style="max-width: 250px;">
+                        <p>Ou copie o código PIX Copia e Cola:</p>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" [value]="paymentResponse.pixCopyPasteCode" readonly #pixCodeInput>
+                            <button class="btn btn-outline-secondary" type="button" (click)="copyToClipboard(pixCodeInput)">Copiar</button>
+                        </div>
+                        <small class="text-muted">O pedido será confirmado após a identificação do pagamento.</small>
+                    </div>
+
+                    <div *ngIf="paymentResponse && paymentMethod === 'boleto'" class="mt-4 p-3 border rounded bg-light">
+                        <h5>Pague com Boleto</h5>
+                        <p>Clique no botão abaixo para visualizar ou imprimir seu boleto:</p>
+                        <a [href]="paymentResponse.boletoUrl" target="_blank" class="btn btn-info mb-3">Ver Boleto</a>
+                        <p>Ou copie a linha digitável:</p>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" [value]="paymentResponse.boletoDigitableLine" readonly #boletoCodeInput>
+                            <button class="btn btn-outline-secondary" type="button" (click)="copyToClipboard(boletoCodeInput)">Copiar</button>
+                        </div>
+                        <small class="text-muted">Boletos podem levar até 3 dias úteis para serem compensados.</small>
+                    </div>
+
+                </div>
+
+                <!-- Coluna Lateral (Resumo do Carrinho) -->
+                <div class="col-md-5 col-lg-4 order-md-last">
+                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-primary">Resumo do Pedido</span>
+                        <span class="badge bg-primary rounded-pill">{{ cart.totalQuantity }}</span>
+                    </h4>
+                    <ul class="list-group mb-3">
+                        <li *ngFor="let item of cart.items" class="list-group-item d-flex justify-content-between lh-sm">
+                            <div>
+                                <h6 class="my-0">{{ item.name }}</h6>
+                                <small class="text-muted">Qtd: {{ item.quantity }}</small>
+                            </div>
+                            <span class="text-muted">R$ {{ (item.price * item.quantity) | number:'1.2-2' }}</span>
+                        </li>
+                        <!-- Frete -->
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Frete</span>
+                            <strong *ngIf="selectedShipping">R$ {{ selectedShipping.price | number:'1.2-2' }}</strong>
+                            <small *ngIf="!selectedShipping && isLoadingShipping">Calculando...</small>
+                            <small *ngIf="!selectedShipping && !isLoadingShipping && selectedAddress">(Selecione o frete)</small>
+                            <small *ngIf="!selectedShipping && !isLoadingShipping && !selectedAddress">(Selecione o endereço)</small>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <span class="fw-bold">Total</span>
+                            <strong class="fw-bold">R$ {{ ( (cart.totalPrice || 0) + (selectedShipping?.price || 0) ) | number:'1.2-2' }}</strong>
+                        </li>
+                    </ul>
+                    <a routerLink="/cart" class="text-muted"><small>Voltar ao carrinho</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensagem de Carrinho Vazio -->
+    <ng-template #emptyCartMessage>
+        <div class="alert alert-warning text-center" role="alert">
+            Seu carrinho está vazio. <a routerLink="/products">Continue comprando</a>.
+        </div>
+    </ng-template>
+
+    <!-- Indicador de Carregamento do Carrinho -->
+    <ng-template #loadingCart>
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando carrinho...</span>
+            </div>
+        </div>
+    </ng-template>
+
+</div>
