@@ -1,6 +1,7 @@
 #  🧼 Clube do Java - E-commerce
 
 ![](https://img.shields.io/badge/Java-17-orange)
+![](https://img.shields.io/badge/Angular-darkred)
 ![](https://img.shields.io/badge/Spring%20Boot-3.x-green)
 ![](https://img.shields.io/badge/Project%20Loom-Virtual%20Threads-blue)
 ![](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
